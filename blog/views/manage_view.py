@@ -10,7 +10,7 @@ def manage():
     entries = Entry.query.filter_by(name=session['name']).all()
     return render_template('manage.html', title=title, entries=entries)
 
-@app.route('/entry', methods=['GET', 'POST'])
+@app.route('/new_entry', methods=['GET', 'POST'])
 def add_entry():
     title = '新規投稿作成'
     if not session.get('logged_in'):
@@ -30,4 +30,4 @@ def add_entry():
             db.session.commit()
             flash('新しく記事が作成されました')
             return redirect(url_for('manage'))
-    return render_template('entry.html', title=title)
+    return render_template('new_entry.html', title=title)
