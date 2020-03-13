@@ -1,3 +1,18 @@
 {% extends 'base.html' %}
 {% block body %}
+<div class="">
+    <a href="{{ url_for('add_entry') }}">新規投稿</a>
+</div>
+<div class="">
+    <ul>
+        {% for entry in entries %}
+        <div class="">
+            <h5 class="">{{ entry.title }}</h5>
+            <a href="">本文を読む</a>
+        </div>
+        {% else %}
+        投稿がありません
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}
