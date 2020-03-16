@@ -34,9 +34,9 @@ def login():
     if request.method == 'POST':
         if request.form['name'] == '':
             flash('名前を入力してください')
-        elif request.form['password'] == '':
+        if request.form['password'] == '':
             flash('パスワードを入力してください')
-        else:
+        if not request.form['name'] == '' and not request.form['password'] == '':
             user_name = request.form['name']
             user = Account.query.filter_by(name=user_name).first()
             if user is None:
