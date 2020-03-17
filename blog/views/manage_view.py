@@ -1,6 +1,7 @@
 from flask import Flask, render_template, flash, session, redirect, url_for, request
 from blog import app, db
 from blog.models.entries import Entry
+from datetime import datetime
 
 @app.route('/manage')
 def manage():
@@ -18,9 +19,9 @@ def add_entry():
     if request.method == 'POST':
         if request.form['title'] == '':
             flash('タイトルを入力してください')
-        elif request.form['text'] == '':
+        if request.form['text'] == '':
             flash('本文を入力してください')
-        else:
+        if not request.form['title'] == '' and not request.form['text'] == '':
             entry = Entry(
                 name = session['name'],
                 title = request.form['title'],
@@ -31,3 +32,24 @@ def add_entry():
             flash('新しく記事が作成されました')
             return redirect(url_for('manage'))
     return render_template('new_entry.html', title=title)
+
+@app.route('/<string:name>/<int:id>/edit_entry', methods=['GET'])
+def edit_entry(name, id):
+    title = '投稿編集'
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    entry = Entry.query.filter_by(name=name, id=id).first()
+    return render_template('edit_entry.html', title=title, entry=entry)
+
+@app.route('/<string:name>/<int:id>/update_entry', methods=['POST'])
+def update_entry(name, id):
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    entry = Entry.query.filter_by(name=name, id=id).first()
+    entry.title = request.form['title']
+    entry.text = request.form['text']
+    entry.updated_at = datetime.utcnow()
+    db.session.merge(entry)
+    db.session.commit()
+    flash('記事が更新されました')
+    return redirect(url_for('entry', name=name, id=id))

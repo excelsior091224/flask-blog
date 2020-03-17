@@ -4,11 +4,15 @@
     <h1>{{ title }}</h1>
 </div>
 <div class="">
+    <a href="{{ url_for('index') }}">サービストップページに戻る</a>
+</div>
+<div class="">
     <ul>
         {% for entry in entries %}
         <div class="">
-            <h5 class="">{{ entry.title }}</h5>
-            <a href="">本文を読む</a>
+            <p>{{ entry.created_at }}</p>
+            <h3 class="">{{ entry.title }}</h3>
+            <a href="{{ url_for('entry', name=entry.name, id=entry.id) }}">本文を読む</a>
         </div>
         {% else %}
         投稿がありません

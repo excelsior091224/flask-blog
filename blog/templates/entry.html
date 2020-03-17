@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="">
+    <h1>{{ entry.name }}</h1>
+</div>
+<div class="">
+    <ul>
+        <li><a href="{{ url_for('index') }}">サービストップページに戻る</a></li>
+        <li><a href="{{ url_for('blog', name=entry.name) }}">ブログトップページに戻る</a></li>
+    </ul>
+</div>
+<div class="">
+    <h2>{{ title }}</h2>
+    <div class="">
+        {{ entry.text |replace("\n", '<br>') |safe}}
+    </div>
+    <div class="">
+        作成：{{ entry.created_at }}<br>
+        {% if entry.updated_at %}
+        更新：{{ entry.updated_at }}
+        {% endif %}
+    </div>
+    <div class="">
+        <ul>
+            <li><a href="{{ url_for('edit_entry', name=entry.name, id=entry.id) }}">編集</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

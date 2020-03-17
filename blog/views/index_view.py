@@ -5,7 +5,8 @@ from blog.models.accounts import Account
 @app.route('/')
 def index():
     title = 'Flaskブログサービストップ'
-    return render_template('index.html', title=title)
+    users = Account.query.all()
+    return render_template('index.html', title=title, users=users)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -13,9 +14,9 @@ def register():
     if request.method == 'POST':
         if request.form['name'] == '':
             flash('名前を入力してください')
-        elif request.form['password'] == '':
+        if request.form['password'] == '':
             flash('パスワードを入力してください')
-        else:
+        if not request.form['name'] == '' and not request.form['password'] == '':
             account = Account(
                 name=request.form['name'],
                 hashed_password=request.form['password']

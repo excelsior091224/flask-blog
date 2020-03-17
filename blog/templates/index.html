@@ -22,7 +22,9 @@
 </div>
 <div class="">
     <ul>
-        <li>工事中</li>
+        {% for user in users %}
+        <li><a href="{{ url_for('blog', name=user.name) }}">{{ user.name }}</a></li>
+        {% endfor %}
     </ul>
 </div>
 {% endblock %}
