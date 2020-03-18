@@ -16,14 +16,17 @@
     </div>
     <div class="">
         作成：{{ entry.created_at }}<br>
-        {% if entry.updated_at %}
+        {% if entry.updated_at != entry.created_at %}
         更新：{{ entry.updated_at }}
         {% endif %}
     </div>
     <div class="">
-        <ul>
-            <li><a href="{{ url_for('edit_entry', name=entry.name, id=entry.id) }}">編集</a></li>
-        </ul>
+        <form action="{{ url_for('edit_entry', name=entry.name, id=entry.id) }}" method="post">
+            <input type="submit" value="編集"/>
+        </form>
+        <form action="{{ url_for('delete_entry', name=entry.name, id=entry.id) }}" method="post">
+            <input type="submit" value="削除"/>
+        </form>
     </div>
 </div>
 {% endblock %}

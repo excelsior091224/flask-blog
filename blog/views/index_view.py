@@ -1,5 +1,5 @@
 from flask import Flask, render_template, flash, session, redirect, url_for, request
-from blog import app, db
+from blog import app, db, bcrypt
 from blog.models.accounts import Account
 
 @app.route('/')
@@ -19,7 +19,7 @@ def register():
         if not request.form['name'] == '' and not request.form['password'] == '':
             account = Account(
                 name=request.form['name'],
-                hashed_password=request.form['password']
+                hashed_password=bcrypt.generate_password_hash(request.form['password'])
             )
             db.session.add(account)
             db.session.commit()
@@ -44,14 +44,14 @@ def login():
                 return redirect(url_for('login'))
             else:
                 password = request.form['password']
-                if password != user.hashed_password:
-                    flash('パスワードが違います')
-                    return redirect(url_for('login'))
-                else:
+                if bcrypt.check_password_hash(user.hashed_password, password):
                     session['logged_in'] = True
                     session['name'] = request.form['name']
                     flash('ユーザー名:' + session['name'] + 'でログインしました')
                     return redirect(url_for('index'))
+                else:
+                    flash('パスワードが違います')
+                    return redirect(url_for('login'))
     return render_template('login.html', title=title)
 
 @app.route('/logout')

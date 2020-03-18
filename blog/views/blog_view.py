@@ -5,7 +5,7 @@ from blog.models.entries import Entry
 @app.route('/<string:name>')
 def blog(name):
     title = name
-    entries = Entry.query.filter_by(name=name).all()
+    entries = Entry.query.filter_by(name=name).order_by(Entry.updated_at.desc()).all()
     return render_template('blog.html', title=title, entries=entries)
 
 @app.route('/<string:name>/<int:id>')

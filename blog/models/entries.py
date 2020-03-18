@@ -10,12 +10,13 @@ class Entry(db.Model):
     created_at = db.Column(db.DateTime)
     updated_at = db.Column(db.DateTime, nullable=True)
 
-    def __init__(self, name=None, title=None, text=None, updated_at=None):
+    def __init__(self, name=None, title=None, text=None):
+        now = datetime.utcnow()
         self.name = name
         self.title = title
         self.text = text
-        self.created_at = datetime.utcnow()
-        self.updated_at = updated_at
+        self.created_at = now
+        self.updated_at = now
 
     def __repr__(self):
         return '<Entry id:{} name:{} title:{} text:{}>'.format(self.id, self.name, self.title, self.text)

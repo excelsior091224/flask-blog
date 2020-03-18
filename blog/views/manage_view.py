@@ -8,7 +8,7 @@ def manage():
     title = '管理画面'
     if not session.get('logged_in'):
         return redirect(url_for('login'))
-    entries = Entry.query.filter_by(name=session['name']).all()
+    entries = Entry.query.filter_by(name=session['name']).order_by(Entry.updated_at.desc()).all()
     return render_template('manage.html', title=title, entries=entries)
 
 @app.route('/new_entry', methods=['GET', 'POST'])
@@ -53,3 +53,13 @@ def update_entry(name, id):
     db.session.commit()
     flash('記事が更新されました')
     return redirect(url_for('entry', name=name, id=id))
+
+@app.route('/<string:name>/<int:id>/delete_entry', methods=['POST'])
+def delete_entry(name, id):
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    entry = Entry.query.filter_by(name=name, id=id).first()
+    db.session.delete(entry)
+    db.session.commit()
+    flash('記事が削除されました')
+    return redirect(url_for('manage'))
