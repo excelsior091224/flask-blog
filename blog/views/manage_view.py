@@ -33,7 +33,7 @@ def add_entry():
             return redirect(url_for('manage'))
     return render_template('new_entry.html', title=title)
 
-@app.route('/<string:name>/<int:id>/edit_entry', methods=['GET'])
+@app.route('/<string:name>/<int:id>/edit_entry', methods=['GET', 'POST'])
 def edit_entry(name, id):
     title = '投稿編集'
     if not session.get('logged_in'):
